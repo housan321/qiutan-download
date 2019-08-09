@@ -32,7 +32,7 @@ class EcSpider(scrapy.Spider):
         subleagueId = self.subleagueId[league]
         re = time.strftime('%Y%m%d%H', time.localtime())  # 2019042509
         base_url = 'http://zq.win007.com/jsData/matchResult/{}/s{}{}.js?version={}'
-        date_lis = ['{}-{}'.format(i, i + 1) for i in range(2010, 2019)]  #赛季格式 2018-2019
+        date_lis = ['{}-{}'.format(i, i + 1) for i in range(2011, 2019)]  #赛季格式 2018-2019
         # date_lis = ['{}'.format(i) for i in range(2017, 2019)]  #赛季格式 2018
         for date in date_lis:
             req_base = scrapy.Request(base_url.format(date, league_id, subleagueId, re), callback=self.parse)
@@ -113,9 +113,9 @@ class EcSpider(scrapy.Spider):
                 item['half_score'] = lis[7]
                 yield item
 
-                # 拼接每个比赛详细分析 url http://zq.win007.com/analysis/851859cn.htm
+                #1 拼接每个比赛详细分析 url http://zq.win007.com/analysis/851859cn.htm
                 url = 'http://zq.win007.com/analysis/{}cn.htm'.format(bs_num_id)
-                # url = 'http://zq.win007.com/analysis/851548cn.htm'
+                # url = 'http://zq.win007.com/analysis/404801cn.htm'
                 req = scrapy.Request(url, callback=self.bs_score, errback=self.bs_resquest_err)
                 req.meta['err_id'] = '001'
                 req.meta['league'] = league
@@ -128,7 +128,7 @@ class EcSpider(scrapy.Spider):
                 req.meta['bs_time'] = lis[3]
                 yield req
 
-                # # 拼接每个比赛欧盘赔率 url http://1x2d.win007.com/1130517.js
+                #2 拼接每个比赛欧盘赔率 url http://1x2d.win007.com/1130517.js
                 # # 2013-08-17 ,2014-5-12 老版页面  判断年份 保存版本
                 # if item['bs_time'] < '2014-05-12 0:00':
                 url = 'http://1x2d.win007.com/{}.js'.format(bs_num_id)
@@ -141,7 +141,7 @@ class EcSpider(scrapy.Spider):
                 req.meta['awayteam'] = lis_all_team[index_num_g + 1]
                 yield req
 
-                # # 拼接每个比赛亚盘赔率 url http://vip.win007.com/AsianOdds_n.aspx?id=987100
+                #3 拼接每个比赛亚盘赔率 url http://vip.win007.com/AsianOdds_n.aspx?id=987100
                 # # 2013-08-17 ,2014-5-12 老版页面  判断年份 保存版本
                 # if item['bs_time'] < '2014-05-12 0:00':
                 url = 'http://vip.win007.com/AsianOdds_n.aspx?id={}'.format(bs_num_id)
@@ -191,25 +191,27 @@ class EcSpider(scrapy.Spider):
 
         # 实例化Item
         item = Match_Score_New_Item()
-        if season >= '2011-2012':
-        # if season > '2013':
-            tables = response.xpath("//*[text()='联赛积分排名']/../../../..//table")
-            if not tables:
-                tables = response.xpath("//*[text()='联赛积分排名']/../../../../..//table")
-            home_table = tables[1].xpath('./tr/td/text()').extract()
-            away_table = tables[2].xpath('./tr/td/text()').extract()
-            if not home_table: #如果没有数据，是因为table的位置不对应
-                home_table = tables[2].xpath('./tr/td/text()').extract()
-                away_table = tables[3].xpath('./tr/td/text()').extract()
+        if season > '2013-2014':
+            table_num = 1
+        else: table_num = 0
+
+        tables = response.xpath("//*[text()='联赛积分排名']/../../../..//table")
+        if not tables:
+            tables = response.xpath("//*[text()='联赛积分排名']/../../../../..//table")
+        home_table = tables[table_num].xpath('./tr/td/text()').extract()
+        away_table = tables[table_num+1].xpath('./tr/td/text()').extract()
+        if not home_table: #如果没有数据，是因为table的位置不对应
+            home_table = tables[table_num+1].xpath('./tr/td/text()').extract()
+            away_table = tables[table_num+2].xpath('./tr/td/text()').extract()
         # elif season < '2012-2013':
         # # elif season < '2012':
         #     tables = response.xpath("//*[text()='联赛积分排名']/../../../../..//table")
         #     home_table = tables[1].xpath('./tr/td/text()').extract()
         #     away_table = tables[2].xpath('./tr/td/text()').extract()
-        else:
-            tables = response.xpath("//*[text()='联赛积分排名']/../../../../..//table")
-            home_table = tables[0].xpath('./tr/td/text()').extract()
-            away_table = tables[1].xpath('./tr/td/text()').extract()
+
+        # tables = response.xpath("//*[text()='联赛积分排名']/../../../../..//table")
+        # home_table = tables[0].xpath('./tr/td/text()').extract()
+        # away_table = tables[1].xpath('./tr/td/text()').extract()
 
         VTFormPtsStr = self.get_VS_result(response, 'v_data.*?\[(\[.*?\])\];')
         HTFormPtsStr = self.get_VS_result(response, 'h_data.*?\[(\[.*?\])\];')
