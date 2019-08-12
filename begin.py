@@ -23,14 +23,14 @@ if __name__=='__main__':#在win系统下必须要满足这个if条件
     db = MySql('localhost', 'root', '123456', 'qiutan', 3306)
 
     #1 先清除旧数据
-    del_sql1 = 'truncate table all_match_score;'
-    del_sql2 = 'truncate table all_match_oz_odds;'
-    del_sql3 = 'truncate table all_match_az_odds;'
-    del_sql4 = 'truncate table league_match_data;'
-    db.del_item(del_sql1)
-    db.del_item(del_sql2)
-    db.del_item(del_sql3)
-    db.del_item(del_sql4)
+    # del_sql1 = 'truncate table all_match_score;'
+    # del_sql2 = 'truncate table all_match_oz_odds;'
+    # del_sql3 = 'truncate table all_match_az_odds;'
+    # del_sql4 = 'truncate table league_match_data;'
+    # db.del_item(del_sql1)
+    # db.del_item(del_sql2)
+    # db.del_item(del_sql3)
+    # db.del_item(del_sql4)
 
     #2 开启爬虫进程
     print('%主进程号',os.getpid())#主进程号

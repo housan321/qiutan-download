@@ -174,7 +174,9 @@ class EcSpider(scrapy.Spider):
         if err_id == '001':
             print('match' + bs_num_id + ' resquest score page failure！' )
         elif err_id == '002':
-            print('match' + bs_num_id + ' resquest odds page failure！')
+            print('match' + bs_num_id + ' resquest oz odds page failure！')
+        elif err_id == '003':
+            print('match' + bs_num_id + ' resquest az odds page failure！')
 
     # 主、客队进失球，积分、排名、近5场赛果等: 新版
     def bs_score(self, response):
