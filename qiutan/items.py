@@ -116,34 +116,61 @@ class Match_Score_New_Item(scrapy.Item):
     bs_time = scrapy.Field()
     FTR = scrapy.Field()
     FTRR = scrapy.Field()
-    h_win = scrapy.Field()
-    h_draw = scrapy.Field()
-    h_lost = scrapy.Field()
-    a_win = scrapy.Field()
-    a_draw = scrapy.Field()
-    a_lost = scrapy.Field()
+    h_nb_wins = scrapy.Field()
+    h_nb_draws = scrapy.Field()
+    h_nb_losts = scrapy.Field()
     HTGS = scrapy.Field()
-    ATGS = scrapy.Field()
     HTGC = scrapy.Field()
-    ATGC = scrapy.Field()
     HTGD = scrapy.Field()
-    ATGD = scrapy.Field()
     HTP = scrapy.Field()
+    HLP = scrapy.Field()
+    hh_nb_games = scrapy.Field()
+    hh_nb_wins = scrapy.Field()
+    hh_nb_draws = scrapy.Field()
+    hh_nb_losts = scrapy.Field()
+    HHTGS = scrapy.Field()
+    HHTGC = scrapy.Field()
+    HHTGD = scrapy.Field()
+    HHTP = scrapy.Field()
+    HHLP = scrapy.Field()
+
+    a_nb_wins = scrapy.Field()
+    a_nb_draws = scrapy.Field()
+    a_nb_losts = scrapy.Field()
+    ATGS = scrapy.Field()
+    ATGC = scrapy.Field()
+    ATGD = scrapy.Field()
     ATP = scrapy.Field()
-    HomeLP = scrapy.Field()
-    AwayLP = scrapy.Field()
+    ALP = scrapy.Field()
+    aa_nb_games = scrapy.Field()
+    aa_nb_wins = scrapy.Field()
+    aa_nb_draws = scrapy.Field()
+    aa_nb_losts = scrapy.Field()
+    AATGS = scrapy.Field()
+    AATGC = scrapy.Field()
+    AATGD = scrapy.Field()
+    AATP = scrapy.Field()
+    AALP = scrapy.Field()
+
     VTFormPtsStr = scrapy.Field()
     HTFormPtsStr = scrapy.Field()
     ATFormPtsStr = scrapy.Field()
 
 
     def get_insert_data(self):
-        insert_sql = 'INSERT  IGNORE  INTO all_match_score values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+        insert_sql = 'INSERT  IGNORE  INTO all_match_score values (' \
+                     '%s,%s,%s,%s,%s,%s,%s,%s,%s,' \
+                     '%s,%s,%s,%s,%s,%s,%s,%s,' \
+                     '%s,%s,%s,%s,%s,%s,%s,%s,%s,' \
+                     '%s,%s,%s,%s,%s,%s,%s,%s,' \
+                     '%s,%s,%s,%s,%s,%s,%s,%s,%s,' \
+                     '%s,%s,%s)'
         data = (
         self['league'], self['season'], self['bs_num_id'], self['lunci'], self['hometeam'], self['awayteam'], self['bs_time'], self['FTR'], self['FTRR'],
-        self['h_win'], self['h_draw'], self['h_lost'], self['a_win'], self['a_draw'], self['a_lost'],
-        self['HTGS'], self['ATGS'], self['HTGC'], self['ATGC'],
-        self['HTGD'], self['ATGD'], self['HTP'], self['ATP'], self['HomeLP'], self['AwayLP'],
+        self['h_nb_wins'], self['h_nb_draws'], self['h_nb_losts'], self['HTGS'],  self['HTGC'], self['HTGD'], self['HTP'], self['HLP'],
+        self['hh_nb_games'], self['hh_nb_wins'], self['hh_nb_draws'], self['hh_nb_losts'], self['HHTGS'], self['HHTGC'], self['HHTGD'], self['HHTP'], self['HHLP'],
+        self['a_nb_wins'], self['a_nb_draws'], self['a_nb_losts'], self['ATGS'], self['ATGC'],self['ATGD'], self['ATP'], self['ALP'],
+        self['aa_nb_games'], self['aa_nb_wins'], self['aa_nb_draws'], self['aa_nb_losts'], self['AATGS'], self['AATGC'], self['AATGD'], self['AATP'], self['AALP'],
         self['VTFormPtsStr'], self['HTFormPtsStr'], self['ATFormPtsStr'])
 
         return insert_sql, data
@@ -158,22 +185,40 @@ class Match_Score_New_Item(scrapy.Item):
 # bs_time VARCHAR(30),
 # FTR VARCHAR(10),
 # FTRR VARCHAR(10),
-# h_win INT,
-# h_draw INT,
-# h_lost INT,
-# a_win INT,
-# a_draw INT,
-# a_lost INT,
+# h_nb_wins INT,
+# h_nb_draws INT,
+# h_nb_losts INT,
 # HTGS INT,
-# ATGS INT,
 # HTGC INT,
-# ATGC INT,
 # HTGD INT,
-# ATGD INT,
 # HTP INT,
+# HLP INT,
+# hh_nb_games INT,
+# hh_nb_wins INT,
+# hh_nb_draws INT,
+# hh_nb_losts INT,
+# HHTGS INT,
+# HHTGC INT,
+# HHTGD INT,
+# HHTP INT,
+# HHLP INT,
+# a_nb_wins INT,
+# a_nb_draws INT,
+# a_nb_losts INT,
+# ATGS INT,
+# ATGC INT,
+# ATGD INT,
 # ATP INT,
-# HomeLP INT,
-# AwayLP INT,
+# ALP INT,
+# aa_nb_games INT,
+# aa_nb_wins INT,
+# aa_nb_draws INT,
+# aa_nb_losts INT,
+# AATGS INT,
+# AATGC INT,
+# AATGD INT,
+# AATP INT,
+# AALP INT,
 # VTFormPtsStr VARCHAR(20),
 # HTFormPtsStr VARCHAR(20),
 # ATFormPtsStr VARCHAR(20),

@@ -18,22 +18,22 @@ class EcSpider(scrapy.Spider):
 
     leagueId = {'英超': '36', '西甲': '31', '意甲': '34', '德甲': '8', '法甲': '11',
                 '英冠': '37', '苏超': '29', '葡超': '23', '挪超': '22', '瑞典超': '26',
-                '日职联': '25', '日职乙': '284', '韩K联': '15',
+                '中超': '60', '日职联': '25', '日职乙': '284', '韩K联': '15',
                 '美职业': '21', '巴西甲': '4'}
     subleagueId = {'英超': '', '西甲': '', '意甲': '', '德甲': '', '法甲': '',
                    '英冠': '_87', '苏超': '', '葡超': '_1123', '挪超': '', '瑞典超': '_431',
-                   '日职联': '_943', '日职乙': '_808', '韩K联': '_313',
+                   '中超': '','日职联': '_943', '日职乙': '_808', '韩K联': '_313',
                    '美职业': '_165', '巴西甲': ''}
 
     # 将不同年份url交给Scheduler
     def start_requests(self):
-        league = '西甲'
+        league = '巴西甲'
         league_id = self.leagueId[league]
         subleagueId = self.subleagueId[league]
         re = time.strftime('%Y%m%d%H', time.localtime())  # 2019042509
         base_url = 'http://zq.win007.com/jsData/matchResult/{}/s{}{}.js?version={}'
-        date_lis = ['{}-{}'.format(i, i + 1) for i in range(2011, 2019)]  #赛季格式 2018-2019
-        # date_lis = ['{}'.format(i) for i in range(2017, 2019)]  #赛季格式 2018
+        # date_lis = ['{}-{}'.format(i, i + 1) for i in range(2011, 2019)]  #赛季格式 2018-2019
+        date_lis = ['{}'.format(i) for i in range(2011, 2020)]  #赛季格式 2018
         for date in date_lis:
             req_base = scrapy.Request(base_url.format(date, league_id, subleagueId, re), callback=self.parse)
             req_base.meta['league'] = league
@@ -193,7 +193,8 @@ class EcSpider(scrapy.Spider):
 
         # 实例化Item
         item = Match_Score_New_Item()
-        if season > '2013-2014':
+        # if season > '2013-2014':
+        if season >= '2014':
             table_num = 1
         else: table_num = 0
 
@@ -222,28 +223,49 @@ class EcSpider(scrapy.Spider):
         item['league'] = league
         item['season'] = season
         item['bs_num_id'] = bs_num_id
-        item['lunci'] = int(home_table[12])+1
+        item['lunci'] = int(home_table[12])
         item['hometeam'] = hometeam
         item['awayteam'] = awayteam
         item['bs_time'] = bs_time
         item['FTR'] = FTR
         item['FTRR'] = FTRR
-        item['h_win'] = home_table[13]
-        item['h_draw'] = home_table[14]
-        item['h_lost'] = home_table[15]
+
+        item['h_nb_wins'] = home_table[13]
+        item['h_nb_draws'] = home_table[14]
+        item['h_nb_losts'] = home_table[15]
         item['HTGS'] = home_table[16]
         item['HTGC'] = home_table[17]
         item['HTGD'] = home_table[18]
         item['HTP'] = home_table[19]
-        item['HomeLP'] = home_table[20]
-        item['a_win'] = away_table[13]
-        item['a_draw'] = away_table[14]
-        item['a_lost'] = away_table[15]
+        item['HLP'] = home_table[20]
+        item['hh_nb_games'] = home_table[22]
+        item['hh_nb_wins'] = home_table[23]
+        item['hh_nb_draws'] = home_table[24]
+        item['hh_nb_losts'] = home_table[25]
+        item['HHTGS'] = home_table[26]
+        item['HHTGC'] = home_table[27]
+        item['HHTGD'] = home_table[28]
+        item['HHTP'] = home_table[29]
+        item['HHLP'] = home_table[30]
+
+        item['a_nb_wins'] = away_table[13]
+        item['a_nb_draws'] = away_table[14]
+        item['a_nb_losts'] = away_table[15]
         item['ATGS'] = away_table[16]
         item['ATGC'] = away_table[17]
         item['ATGD'] = away_table[18]
         item['ATP'] = away_table[19]
-        item['AwayLP'] = away_table[20]
+        item['ALP'] = away_table[20]
+        item['aa_nb_games'] = away_table[32]
+        item['aa_nb_wins'] = away_table[33]
+        item['aa_nb_draws'] = away_table[34]
+        item['aa_nb_losts'] = away_table[35]
+        item['AATGS'] = away_table[36]
+        item['AATGC'] = away_table[37]
+        item['AATGD'] = away_table[38]
+        item['AATP'] = away_table[39]
+        item['AALP'] = away_table[40]
+
         item['VTFormPtsStr'] = VTFormPtsStr
         item['HTFormPtsStr'] = HTFormPtsStr
         item['ATFormPtsStr'] = ATFormPtsStr
