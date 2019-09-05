@@ -27,13 +27,13 @@ class EcSpider(scrapy.Spider):
 
     # 将不同年份url交给Scheduler
     def start_requests(self):
-        league = '巴西甲'
+        league = '英超'
         league_id = self.leagueId[league]
         subleagueId = self.subleagueId[league]
         re = time.strftime('%Y%m%d%H', time.localtime())  # 2019042509
         base_url = 'http://zq.win007.com/jsData/matchResult/{}/s{}{}.js?version={}'
-        # date_lis = ['{}-{}'.format(i, i + 1) for i in range(2011, 2019)]  #赛季格式 2018-2019
-        date_lis = ['{}'.format(i) for i in range(2011, 2020)]  #赛季格式 2018
+        date_lis = ['{}-{}'.format(i, i + 1) for i in range(2011, 2020)]  #赛季格式 2018-2019
+        # date_lis = ['{}'.format(i) for i in range(2011, 2020)]  #赛季格式 2018
         for date in date_lis:
             req_base = scrapy.Request(base_url.format(date, league_id, subleagueId, re), callback=self.parse)
             req_base.meta['league'] = league
@@ -64,6 +64,7 @@ class EcSpider(scrapy.Spider):
         num = 0
         # 根据38轮遍历每一小轮
         for eve_turn in ball_lunci_team:
+            num = num+1
             # 每小页数据
             item = SaichengItem()
             # 每轮次的10条数据
@@ -193,8 +194,8 @@ class EcSpider(scrapy.Spider):
 
         # 实例化Item
         item = Match_Score_New_Item()
-        # if season > '2013-2014':
-        if season >= '2014':
+        if season > '2013-2014':
+        # if season >= '2014':
             table_num = 1
         else: table_num = 0
 
