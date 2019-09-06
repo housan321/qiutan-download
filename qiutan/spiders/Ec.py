@@ -29,13 +29,13 @@ class EcSpider(scrapy.Spider):
     def start_requests(self):
         league = '英超'
         league_id = self.leagueId[league]
-        subleagueId = self.subleagueId[league]
+        subleague_id = self.subleagueId[league]
         re = time.strftime('%Y%m%d%H', time.localtime())  # 2019042509
         base_url = 'http://zq.win007.com/jsData/matchResult/{}/s{}{}.js?version={}'
         date_lis = ['{}-{}'.format(i, i + 1) for i in range(2011, 2020)]  #赛季格式 2018-2019
         # date_lis = ['{}'.format(i) for i in range(2011, 2020)]  #赛季格式 2018
         for date in date_lis:
-            req_base = scrapy.Request(base_url.format(date, league_id, subleagueId, re), callback=self.parse)
+            req_base = scrapy.Request(base_url.format(date, league_id, subleague_id, re), callback=self.parse)
             req_base.meta['league'] = league
             req_base.meta['date'] = date
             req_base.meta['re'] = re
