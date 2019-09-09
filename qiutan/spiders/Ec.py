@@ -30,15 +30,14 @@ class EcSpider(scrapy.Spider):
         league = '英超'
         league_id = self.leagueId[league]
         subleagueId = self.subleagueId[league]
-        re = time.strftime('%Y%m%d%H', time.localtime())  # 2019042509
+        time_stamp = time.strftime('%Y%m%d%H', time.localtime())  # 2019042509
         base_url = 'http://zq.win007.com/jsData/matchResult/{}/s{}{}.js?version={}'
         date_lis = ['{}-{}'.format(i, i + 1) for i in range(2011, 2020)]  #赛季格式 2018-2019
         # date_lis = ['{}'.format(i) for i in range(2011, 2020)]  #赛季格式 2018
         for date in date_lis:
-            req_base = scrapy.Request(base_url.format(date, league_id, subleagueId, re), callback=self.parse)
+            req_base = scrapy.Request(base_url.format(date, league_id, subleagueId, time_stamp), callback=self.parse)
             req_base.meta['league'] = league
             req_base.meta['date'] = date
-            req_base.meta['re'] = re
             yield req_base
 
     def team_data_id(self, response):
@@ -76,7 +75,7 @@ class EcSpider(scrapy.Spider):
                 lis = eve_turn_team_data.strip('[|]').replace('\'', '').split(',')
                 # 根据获取的战队id去之前的列表找索引位置
                 index_num_h = lis_all_team.index(lis[4])
-                index_num_g = lis_all_team.index(lis[5])
+                index_num_a = lis_all_team.index(lis[5])
                 res = re.split("-", lis[6])
                 if len(res) != 2: continue  #比赛取消等结果
                 if res[0] > res[1]:
@@ -102,11 +101,11 @@ class EcSpider(scrapy.Spider):
                 bs_num_id = lis[0]
                 item['bs_time'] = lis[3]  # 2014-05-04 23:00 <class 'str'>
                 item['bs_num_id'] = bs_num_id
-                item['host_team'] = lis_all_team[index_num_h + 1]
+                item['hometeam'] = lis_all_team[index_num_h + 1]
                 item['h_team_id'] = lis[4]
                 item['res_score'] = lis[6]
-                item['guest_team'] = lis_all_team[index_num_g + 1]
-                item['g_team_id'] = lis[5]
+                item['awayteam'] = lis_all_team[index_num_a + 1]
+                item['a_team_id'] = lis[5]
                 item['all_rang'] = self.rangqiu(lis[10])
                 item['half_rang'] = self.rangqiu(lis[11])
                 item['sizes_balls_a'] = lis[12]
