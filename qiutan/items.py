@@ -24,11 +24,11 @@ class SaichengItem(scrapy.Item):
     FTR = scrapy.Field()
     FTRR = scrapy.Field()
     bs_time = scrapy.Field()
-    host_team = scrapy.Field()
+    hometeam = scrapy.Field()
     h_team_id = scrapy.Field()
     res_score = scrapy.Field()
-    guest_team = scrapy.Field()
-    g_team_id = scrapy.Field()
+    awayteam = scrapy.Field()
+    a_team_id = scrapy.Field()
     all_rang = scrapy.Field()
     half_rang = scrapy.Field()
     sizes_balls_a = scrapy.Field()
@@ -38,8 +38,8 @@ class SaichengItem(scrapy.Item):
     def get_insert_data(self):
         insert_sql = 'INSERT INTO all_bs_data values (null,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
         data = (
-        self['league'], self['season'], self['lunci'], self['bs_num_id'], self['FTR'], self['FTRR'], self['bs_time'], self['host_team'],
-        self['h_team_id'], self['res_score'], self['guest_team'], self['g_team_id'], self['all_rang'],
+        self['league'], self['season'], self['lunci'], self['bs_num_id'], self['FTR'], self['FTRR'], self['bs_time'], self['hometeam'],
+        self['h_team_id'], self['res_score'], self['awayteam'], self['a_team_id'], self['all_rang'],
         self['half_rang'], self['sizes_balls_a'], self['sizes_balls_h'], self['half_score'])
         return insert_sql, data
 
@@ -53,11 +53,11 @@ class SaichengItem(scrapy.Item):
 # FTR VARCHAR(10),
 # FTRR VARCHAR(10),
 # bs_time VARCHAR(20),
-# host_team VARCHAR(20),
+# hometeam VARCHAR(20),
 # h_team_id VARCHAR(6),
 # res_score VARCHAR(10),
-# guest_team VARCHAR(20),
-# g_team_id VARCHAR(6),
+# awayteam VARCHAR(20),
+# a_team_id VARCHAR(6),
 # all_rang VARCHAR(6),
 # half_rang VARCHAR(6),
 # sizes_balls_a VARCHAR(6),

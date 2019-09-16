@@ -27,7 +27,7 @@ class EcSpider(scrapy.Spider):
 
     # 将不同年份url交给Scheduler
     def start_requests(self):
-        league = '英超'
+        league = '葡超'
         league_id = self.leagueId[league]
         time_stamp = time.strftime('%Y%m%d%H', time.localtime())  # 2019042509
         subleague_id = self.subleagueId[league]
