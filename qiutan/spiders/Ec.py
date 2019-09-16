@@ -29,22 +29,13 @@ class EcSpider(scrapy.Spider):
     def start_requests(self):
         league = '英超'
         league_id = self.leagueId[league]
-<<<<<<< HEAD
-        subleagueId = self.subleagueId[league]
         time_stamp = time.strftime('%Y%m%d%H', time.localtime())  # 2019042509
-=======
         subleague_id = self.subleagueId[league]
-        re = time.strftime('%Y%m%d%H', time.localtime())  # 2019042509
->>>>>>> 06a7527d92ed48f4473e6dc82eb33251972b6b8d
         base_url = 'http://zq.win007.com/jsData/matchResult/{}/s{}{}.js?version={}'
         date_lis = ['{}-{}'.format(i, i + 1) for i in range(2011, 2020)]  #赛季格式 2018-2019
         # date_lis = ['{}'.format(i) for i in range(2011, 2020)]  #赛季格式 2018
         for date in date_lis:
-<<<<<<< HEAD
-            req_base = scrapy.Request(base_url.format(date, league_id, subleagueId, time_stamp), callback=self.parse)
-=======
-            req_base = scrapy.Request(base_url.format(date, league_id, subleague_id, re), callback=self.parse)
->>>>>>> 06a7527d92ed48f4473e6dc82eb33251972b6b8d
+            req_base = scrapy.Request(base_url.format(date, league_id, subleague_id, time_stamp), callback=self.parse)
             req_base.meta['league'] = league
             req_base.meta['date'] = date
             yield req_base
@@ -133,7 +124,7 @@ class EcSpider(scrapy.Spider):
                 req.meta['FTR'] = FTR
                 req.meta['FTRR'] = FTRR
                 req.meta['hometeam'] = lis_all_team[index_num_h + 1]
-                req.meta['awayteam'] = lis_all_team[index_num_g + 1]
+                req.meta['awayteam'] = lis_all_team[index_num_a + 1]
                 req.meta['bs_time'] = lis[3]
                 yield req
 
@@ -147,7 +138,7 @@ class EcSpider(scrapy.Spider):
                 req.meta['season'] = season
                 req.meta['bs_num_id'] = bs_num_id
                 req.meta['hometeam'] = lis_all_team[index_num_h + 1]
-                req.meta['awayteam'] = lis_all_team[index_num_g + 1]
+                req.meta['awayteam'] = lis_all_team[index_num_a + 1]
                 yield req
 
                 #3 拼接每个比赛亚盘赔率 url http://vip.win007.com/AsianOdds_n.aspx?id=987100
@@ -161,7 +152,7 @@ class EcSpider(scrapy.Spider):
                 req.meta['season'] = season
                 req.meta['bs_num_id'] = bs_num_id
                 req.meta['hometeam'] = lis_all_team[index_num_h + 1]
-                req.meta['awayteam'] = lis_all_team[index_num_g + 1]
+                req.meta['awayteam'] = lis_all_team[index_num_a + 1]
                 yield req
 
 
